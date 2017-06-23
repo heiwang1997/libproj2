@@ -1,11 +1,11 @@
 from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
 import GetText
 import os
-import mongotest
+# import mongotest
 
 
 def libproj2_get_tfidf(fulltextlist):
-    vectorizer = CountVectorizer()
+    vectorizer = CountVectorizer(min_df=2)
     transformer = TfidfTransformer()
     tfidf = transformer.fit_transform(vectorizer.fit_transform(fulltextlist))
     word = vectorizer.get_feature_names()
@@ -26,7 +26,7 @@ def libproj2_read_from_db():
 
 
 if __name__ == '__main__':
-    dicpath = 'C:/Users/zjkgf/Desktop/55990477_5_project2/samples_50000'
+    dicpath = 'F:/[3rd year] Spring Semester/Data Mining/samples_50000'
     filelist = os.listdir(dicpath)
     fulltextlist = []
     classifierlist = []

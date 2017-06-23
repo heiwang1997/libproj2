@@ -77,13 +77,13 @@ def libproj2_get_xml_doc(filepath):
                                 for line in datalist:
                                     res += line + ' '
                                 fulltext = res
-    if fulldata is not None and 'head' in fulldata.keys():
+    if fulldata and 'head' in fulldata.keys():
         data = fulldata['head']
-        if data is not None and 'docdata' in data.keys():
+        if data and 'docdata' in data.keys():
             data = data['docdata']
-            if data is not None and 'identified-content' in data.keys():
+            if data and 'identified-content' in data.keys():
                 data = data['identified-content']
-                if data is not None and 'classifier' in data.keys():
+                if data and 'classifier' in data.keys():
                     data = data['classifier']
                     if type(data) == list:
                         for element in data:
