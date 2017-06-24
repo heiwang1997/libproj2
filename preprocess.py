@@ -12,11 +12,14 @@ if __name__ == '__main__':
     classifierlist = []
     all_files = len(filelist)
     # Random shuffle applied here.
-    random.shuffle(all_files)
+    random.shuffle(filelist)
     print("All files = %d" % all_files)
     for fid, file in enumerate(filelist):
         try:
             fulltext, classifier = GetText.libproj2_get_xml_doc(dicpath + '/' + file)
+            if not classifier:
+                print("Omitting file %d: %s with no class" % (fid, file))
+                continue
             print("File No.%d: %s processed\r" % (fid, file), end='')
             fulltextlist.append(fulltext)
             classifierlist.append(classifier)

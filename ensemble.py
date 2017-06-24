@@ -2,27 +2,20 @@
 # -*- coding=utf-8 -*-
 
 """
-Python script implementing task 2 in project 2, Data Mining.
-Comparison of different classifiers.
+Python script implementing task 3 in project 2, Data Mining.
+Comparison of different ensemble methods.
 """
 
-import scipy.io
-from numpy import genfromtxt
-import numpy as np
 import pickle
 import time
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import precision_recall_fscore_support
 from collections import defaultdict
+
+import numpy as np
+import scipy.io
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import precision_recall_fscore_support
+import xgboost
 
 
 def get01label(class_mtx, class_id):
@@ -68,9 +61,10 @@ if __name__ == '__main__':
 
     class_name = sorted(list(class_name.items()), key=lambda x: x[1])
     estimator_score = defaultdict(list)
+
     print("All classes = %d" % len(class_name))
     for [cname, cid] in class_name:
-        print("Running Classifier for class %d - %s" % (cid, cname))
+        print("Running Ensembler for class %d - %s" % (cid, cname))
         y_train = get01label(class_matrix_train, cid)
         y_test = get01label(class_matrix_test, cid)
 
@@ -80,28 +74,30 @@ if __name__ == '__main__':
             continue
 
         estimators = [
-            ["Logistic Regression", LogisticRegression()],
-            # GaussianNB won't accept Sparse data.
-            ["Naive Bayes", MultinomialNB()],
-            ["SVM", SVC()],
-            ["Decision Tree", DecisionTreeClassifier()],
-            ["MLP", MLPClassifier()],
-            ["Nearest Neighbors", KNeighborsClassifier(3)],
-            # ["Best SVM", SVC()],
-            # ["Linear SVM", SVC(kernel="linear", C=0.025)],
-            # ["RBF SVM", SVC(gamma=2, C=1)],
-            # ["Gaussian Process", GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True)],  # Use bird not cat
-            # ["Random Forest", RandomForestClassifier(max_depth=5, n_estimators=1000)],
-            # ["Neural Net", MLPClassifier(alpha=1)],
-            # ["AdaBoost", AdaBoostClassifier()],
-            ["QDA", QuadraticDiscriminantAnalysis()]
+            ["Bootstrap", BaggingClassifier()],
+            ["AdaBoost", AdaBoostClassifier()],
+            ["Random Forest", RandomForestClassifier()],
+            # ["Gradient Boost", GradientBoostingClassifier()],
+            ["XGBoost", None]
         ]
 
         for eid, est in enumerate(estimators):
-            start_time = time.clock()
-            clf = est[1].fit(X_train, y_train)
-            y_pred = clf.predict(X_test)
-            end_time = time.clock()
+
+            if est[0] == "XGBoost":
+                dtrain = xgboost.DMatrix(X_train.tocsc(), label=y_train)
+                dtest = xgboost.DMatrix(X_test.tocsc(), label=y_test)
+                param = {'max_depth': 6, 'eta': 0.3, 'silent': 1, 'objective': 'binary:logistic'}
+                start_time = time.clock()
+                bst = xgboost.train(param, dtrain)
+                y_pred = bst.predict(dtest)
+                end_time = time.clock()
+                y_pred[y_pred > 0.5] = 1
+                y_pred[y_pred != 1] = 0
+            else:
+                start_time = time.clock()
+                clf = est[1].fit(X_train, y_train)
+                y_pred = clf.predict(X_test)
+                end_time = time.clock()
             precision, recall, fscore, ts = precision_recall_fscore_support(y_test, y_pred,
                                                                             average='binary',
                                                                             beta=1.0)
