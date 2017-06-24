@@ -20,7 +20,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, PassiveAggressiveClassifier, RidgeClassifier
 from sklearn.metrics import precision_recall_fscore_support
 from collections import defaultdict
 
@@ -55,6 +55,7 @@ if __name__ == '__main__':
     test_count = all_document_count - train_count
     print("Analyse complete. # Valid Document = %d, train = %d, test = %d" %
           (all_document_count, train_count, test_count))
+    print("Features Count = %d" % feat_matrix.shape[1])
 
     with open("Class.pkl", "rb") as f:
         [class_name, class_matrix] = pickle.load(f)
@@ -81,20 +82,13 @@ if __name__ == '__main__':
 
         estimators = [
             ["Logistic Regression", LogisticRegression()],
-            # GaussianNB won't accept Sparse data.
             ["Naive Bayes", MultinomialNB()],
             ["SVM", SVC()],
             ["Decision Tree", DecisionTreeClassifier()],
             ["MLP", MLPClassifier()],
-            ["Nearest Neighbors", KNeighborsClassifier(3)],
-            # ["Best SVM", SVC()],
-            # ["Linear SVM", SVC(kernel="linear", C=0.025)],
-            # ["RBF SVM", SVC(gamma=2, C=1)],
-            # ["Gaussian Process", GaussianProcessClassifier(1.0 * RBF(1.0), warm_start=True)],  # Use bird not cat
-            # ["Random Forest", RandomForestClassifier(max_depth=5, n_estimators=1000)],
-            # ["Neural Net", MLPClassifier(alpha=1)],
-            # ["AdaBoost", AdaBoostClassifier()],
-            ["QDA", QuadraticDiscriminantAnalysis()]
+            ["Nearest Neighbors", KNeighborsClassifier()],
+            ["Passive Agressive", PassiveAggressiveClassifier()],
+            ["Ridge", RidgeClassifier()]
         ]
 
         for eid, est in enumerate(estimators):

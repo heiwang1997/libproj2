@@ -12,10 +12,12 @@ from collections import defaultdict
 
 import numpy as np
 import scipy.io
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier, ExtraTreesClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.metrics import precision_recall_fscore_support
 import xgboost
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.neighbors import KNeighborsClassifier
 
 
 def get01label(class_mtx, class_id):
@@ -77,7 +79,10 @@ if __name__ == '__main__':
             ["Bootstrap", BaggingClassifier()],
             ["AdaBoost", AdaBoostClassifier()],
             ["Random Forest", RandomForestClassifier()],
-            # ["Gradient Boost", GradientBoostingClassifier()],
+            ["Extra Trees", ExtraTreesClassifier()],
+            ["KNN Bagging", BaggingClassifier(base_estimator=KNeighborsClassifier())],
+            ["NB Boosting", AdaBoostClassifier(base_estimator=MultinomialNB())],
+            ["NB Bagging", BaggingClassifier(base_estimator=MultinomialNB())],
             ["XGBoost", None]
         ]
 
