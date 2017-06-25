@@ -6,23 +6,19 @@ Python script implementing task 2 in project 2, Data Mining.
 Comparison of different classifiers.
 """
 
-import scipy.io
-from numpy import genfromtxt
-import numpy as np
 import pickle
 import time
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
+from collections import defaultdict
+
+import numpy as np
+import scipy.io
+from sklearn.linear_model import LogisticRegression, PassiveAggressiveClassifier, RidgeClassifier
+from sklearn.metrics import precision_recall_fscore_support
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.linear_model import LogisticRegression, PassiveAggressiveClassifier, RidgeClassifier
-from sklearn.metrics import precision_recall_fscore_support
-from collections import defaultdict
 
 
 def get01label(class_mtx, class_id):

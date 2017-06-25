@@ -12,10 +12,9 @@ from collections import defaultdict
 
 import numpy as np
 import scipy.io
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier, ExtraTreesClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.metrics import precision_recall_fscore_support
 import xgboost
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier, ExtraTreesClassifier
+from sklearn.metrics import precision_recall_fscore_support
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 

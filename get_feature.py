@@ -5,7 +5,7 @@ import sys
 from scipy.io import mmwrite
 from scipy.sparse.csr import csr_matrix
 
-import GetTfIdf
+import get_tfidf
 
 if __name__ == '__main__':
     if not os.path.exists("Saved.pkl"):
@@ -31,7 +31,8 @@ if __name__ == '__main__':
     with open("Class.pkl", "wb") as f:
         pickle.dump([all_classes, p_classifier_list], f)
     print("Calculating Tf-Idf...")
-    word, weight = GetTfIdf.libproj2_get_tfidf(fulltextlist)
+    word, weight = get_tfidf.libproj2_get_tfidf(fulltextlist)
     print("Saving Tf-Idf...")
+    # This is not needed since weight is already sparse from sklearn.
     weight = csr_matrix(weight)
     mmwrite('feat.mtx', weight)

@@ -3,7 +3,7 @@ import sys
 import pickle
 import random
 
-import GetText
+import get_text
 
 if __name__ == '__main__':
     dicpath = sys.argv[1]
@@ -16,7 +16,7 @@ if __name__ == '__main__':
     print("All files = %d" % all_files)
     for fid, file in enumerate(filelist):
         try:
-            fulltext, classifier = GetText.libproj2_get_xml_doc(dicpath + '/' + file)
+            fulltext, classifier = get_text.libproj2_get_xml_doc(dicpath + '/' + file)
             if not classifier:
                 print("Omitting file %d: %s with no class" % (fid, file))
                 continue

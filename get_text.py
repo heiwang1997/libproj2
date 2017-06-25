@@ -91,8 +91,3 @@ def libproj2_get_xml_doc(filepath):
                     else:
                         classifier.append(data['#text'])
     return libproj2_pretreatment_doc(fulltext, classifier)
-
-
-if __name__ == '__main__':
-    wordlist, classifier = libproj2_get_xml_doc("C:/Users/zjkgf/Desktop/55990477_5_project2/samples_50000/1855667.xml")
-    wordlist, classifier = libproj2_get_xml_doc("C:/Users/zjkgf/Desktop/55990477_5_project2/samples_50000/1802525.xml")
